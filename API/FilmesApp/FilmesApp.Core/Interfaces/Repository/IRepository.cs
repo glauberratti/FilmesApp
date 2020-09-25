@@ -7,7 +7,8 @@ namespace FilmesApp.Core.Interfaces.Repository
     {
         ValueTask<TEntity> GetByIdAsync(int id);
         Task<IEnumerable<TEntity>> GetAllAsync();
-        Task SaveAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
     }
 }

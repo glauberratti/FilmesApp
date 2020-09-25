@@ -10,6 +10,7 @@ namespace FilmesApp.API.AutoMapper
         {
             CreateMap<MovieDTO, Movie>().ReverseMap();
             CreateMap<SaveMovieDTO, Movie>().ReverseMap();
+            CreateMap<MovieDTO, SaveMovieDTO>();
         }
     }
 }

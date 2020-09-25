@@ -8,7 +8,8 @@ namespace FilmesApp.Core.Interfaces.Services
     {
         ValueTask<Movie> GetById(int id);
         Task<IEnumerable<Movie>> GetAll();
-        Task Save(Movie movie);
+        Task Add(Movie movie);
+        Task Update(Movie movie);
         Task Delete(int id);
     }
 }

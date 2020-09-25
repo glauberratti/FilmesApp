@@ -25,9 +25,15 @@ namespace FilmesApp.Core.Services
             return await _unitOfWork.Movie.GetAllAsync();
         }
 
-        public async Task Save(Movie movie)
+        public async Task Add(Movie movie)
         {
-            await _unitOfWork.Movie.SaveAsync(movie);
+            await _unitOfWork.Movie.AddAsync(movie);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task Update(Movie movie)
+        {
+            await _unitOfWork.Movie.UpdateAsync(movie);
             await _unitOfWork.CommitAsync();
         }
 

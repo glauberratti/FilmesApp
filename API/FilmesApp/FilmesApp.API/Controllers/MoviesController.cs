@@ -40,6 +40,7 @@ namespace FilmesApp.API.Controllers
                     return NotFound();
 
                 var movieDTO = _mapper.Map<Movie, MovieDTO>(movie);
+                
                 return Ok(movieDTO);
             }
             catch (Exception ex)
@@ -76,12 +77,39 @@ namespace FilmesApp.API.Controllers
             try
             {
                 var validatorResult = await _validator.ValidateAsync(saveMovie);
-
                 if (!validatorResult.IsValid)
                     return BadRequest(validatorResult.Errors);
 
                 var movie = _mapper.Map<SaveMovieDTO, Movie>(saveMovie);
-                await _movieService.Save(movie);
+                await _movieService.Add(movie);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> Update([FromBody] MovieDTO movieDTO)
+        {
+            try
+            {
+                var movieRes = await _movieService.GetById(movieDTO.Id);
+                if (movieRes == null)
+                    return NotFound();
+                
+                var validatorResult = await _validator.ValidateAsync(_mapper.Map<MovieDTO, SaveMovieDTO>(movieDTO));
+                if (!validatorResult.IsValid)
+                    return BadRequest(validatorResult.Errors);
+
+                var movie = _mapper.Map<MovieDTO, Movie>(movieDTO);
+                await _movieService.Update(movie);
 
                 return Ok();
             }
@@ -93,14 +121,13 @@ namespace FilmesApp.API.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
                 var movie = await _movieService.GetById(id);
-
                 if (movie == null)
                     return NotFound();
 

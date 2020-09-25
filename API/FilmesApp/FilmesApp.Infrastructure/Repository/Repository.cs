@@ -17,17 +17,26 @@ namespace FilmesApp.Infrastructure.Repository
 
         public async ValueTask<TEntity> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
+            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+            if (entity != null)
+                _dbContext.Entry(entity).State = EntityState.Detached;
+            
+            return entity;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
-        public async Task SaveAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
+        }
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            await Task.Run(() => { _dbContext.Entry(entity).State = EntityState.Modified; });
         }
 
         public async Task DeleteAsync(int id)
