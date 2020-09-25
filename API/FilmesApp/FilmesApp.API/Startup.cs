@@ -1,6 +1,8 @@
 using FilmesApp.Infrastructure;
+using FilmesApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +28,13 @@ namespace FilmesApp.API
             services.AddDIInfrastructure(Configuration);
 
             services.AddSwaggerGen(options => {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesApp", Version = "v1" });
+                options.SwaggerDoc(
+                    "v1",
+                    new OpenApiInfo {
+                        Title = "FilmesApp",
+                        Version = "v1",
+                        Description = "Aplicação simples para gerenciar lista de filmes utilizando .NET Core e Angular.",
+                    });
             });
         }
 
@@ -38,6 +46,8 @@ namespace FilmesApp.API
                 c.RoutePrefix = "";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FilmesApp v1");
             });
+
+            UpdateDatabase(app);
 
             if (env.IsDevelopment())
             {
@@ -54,6 +64,19 @@ namespace FilmesApp.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<FilmesAppContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

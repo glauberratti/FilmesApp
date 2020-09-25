@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  filmes_app:
+    image: filmes_app_api
+    build:
+      context: .
+    ports:
+      - "5000:5000"
