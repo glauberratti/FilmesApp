@@ -1,11 +1,6 @@
-using FilmesApp.Core.Interfaces.Repository;
-using FilmesApp.Core.Interfaces.Services;
-using FilmesApp.Core.Services;
-using FilmesApp.Infrastructure.Data;
-using FilmesApp.Infrastructure.Repository;
+using FilmesApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,9 +22,9 @@ namespace FilmesApp.API
         {
             services.AddControllers();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IMovieService, MovieService>();
-            services.AddDbContext<FilmesAppContext>(opt => opt.UseSqlite("Data Source=FilmesAppDB"));
+            services.AddDIApi();
+            services.AddDIInfrastructure(Configuration);
+
             services.AddSwaggerGen(options => {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesApp", Version = "v1" });
             });
