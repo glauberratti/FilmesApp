@@ -1,32 +1,46 @@
-<div style="display: flex; flex-direction: column; margin: 0 auto; width: 50%;">
-  <mat-form-field appearance="fill">
-    <mat-label>Título</mat-label>
-    <input matInput>
-  </mat-form-field>
+<div style="margin: 0 auto; width: 50%;">
+  <form class="example-form" [formGroup]="form" style="display: flex; flex-direction: column;">
+    <mat-error *ngIf="validateIsFieldRequired('title')">
+      O título é <strong>obrigatório</strong>.
+    </mat-error>
+    <mat-form-field appearance="fill">
+      <mat-label>Título</mat-label>
+      <input matInput [maxlength]="100" formControlName="title">
+    </mat-form-field>
+  
+    <mat-error *ngIf="validateIsFieldRequired('director')">
+      O diretor é <strong>obrigatório</strong>.
+    </mat-error>
+    <mat-form-field appearance="fill">
+      <mat-label>Diretor</mat-label>
+      <input matInput [maxlength]="100" formControlName="director">
+    </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Diretor</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Gênero</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Sinopse</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Ano</mat-label>
-    <input matInput>
-  </mat-form-field>
+    <mat-error *ngIf="validateIsFieldRequired('genre')">
+      O gênero é <strong>obrigatório</strong>.
+    </mat-error>
+    <mat-form-field appearance="fill">
+      <mat-label>Gênero</mat-label>
+      <input matInput [maxlength]="50" formControlName="genre">
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Sinopse</mat-label>
+      <textarea matInput [maxlength]="500" formControlName="synopsis"></textarea>
+    </mat-form-field>
+  
+    <mat-error *ngIf="validateYear()">
+      O ano teve ser <strong>numérico</strong> com <strong>4</strong> caracteres.
+    </mat-error>
+    <mat-form-field appearance="fill">
+      <mat-label>Ano</mat-label>
+      <input matInput [maxlength]="4" formControlName="year">
+    </mat-form-field>
+  </form>
 
   <button mat-raised-button
     color="primary"
-    (click)="save()">
+    (click)="onSubmit()">
     Salvar
   </button>
 </div>

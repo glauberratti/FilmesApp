@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Movie } from 'src/app/models/movie';
+import { MovieDto } from 'src/app/dtos/movie/MovieDto';
 
 @Component({
   selector: 'app-list-movies',
@@ -9,7 +9,7 @@ import { Movie } from 'src/app/models/movie';
 })
 export class ListMoviesComponent implements OnInit {
 
-  moviesMock: Movie[] = [
+  moviesMock: MovieDto[] = [
     {
       id: 1,
       title: 'título 1',
