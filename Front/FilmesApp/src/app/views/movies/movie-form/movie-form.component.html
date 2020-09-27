@@ -1,5 +1,5 @@
-<div style="margin: 0 auto; width: 50%;">
-  <form class="example-form" [formGroup]="form" style="display: flex; flex-direction: column;">
+<div class="container">
+  <form class="example-form" [formGroup]="form">
     <mat-error *ngIf="validateIsFieldRequired('title') && !isToConsultMovie">
       O título é <strong>obrigatório</strong>.
     </mat-error>
@@ -45,7 +45,7 @@
     Salvar
   </button>
 
-  <button mat-raised-button style="float: right;"
+  <button mat-raised-button class="cancel-button"
     color="warn"
     (click)="routeToListMovies()">
     Cancelar

@@ -1,0 +1,15 @@
+.form-field-genre {
+  margin-left: 15px;
+}
+
+table {
+  width: 100%;
+}
+
+.add-button {
+  position: absolute; bottom: 40px; right: 165px; background-color: limegreen;
+}
+
+.add-icon {
+  color: white;
+}
