@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieDto } from 'src/app/dtos/movie/MovieDto';
+import { MovieDto } from 'src/app/dtos/movie/movieDto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AddMovieDto } from 'src/app/dtos/movie/addMovieDto';
+import { UpdateMovieDto } from 'src/app/dtos/movie/updateMovieDto';
+import { MovieService } from 'src/app/services/movie.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-form',
@@ -18,6 +20,7 @@ export class MovieFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
+    private movieService: MovieService
   ) {
     this.form = this.fb.group({
       title: [null, [Validators.required, Validators.maxLength(100)]],
@@ -35,18 +38,14 @@ export class MovieFormComponent implements OnInit {
 
         if (id) {
           this.isToEditMovie = true;
+
           this.form.addControl('id', this.fb.control(id));
 
-          const movieMock = {
-            id: 1,
-            title: 'título 1',
-            director: 'diretor 1',
-            genre: 'gênero 1',
-            synopsis: 'sinopse 1',
-            year: '2019'
-          };
-
-          this.form.patchValue(movieMock);
+          this.movieService.getById(id)
+          .pipe(take(1))
+          .subscribe((result: MovieDto) => {
+            this.form.patchValue(result);
+          });
         }
       }
     )
@@ -62,19 +61,25 @@ export class MovieFormComponent implements OnInit {
       } else {
         this.add(movie);
       }
-
-      this.routeToListMovies();
     } else {
       this.form.markAllAsTouched();
     }
   }
 
-  add(movie: AddMovieDto): void {
-    console.table('add: ' + JSON.stringify(movie));
+  add(movie: MovieDto): void {
+    this.movieService.add(movie)
+    .pipe(take(1))
+    .subscribe((res: any) => {
+      this.routeToListMovies();
+    });
   }
 
-  update(movie: MovieDto): void {
-    console.log('update: ' + JSON.stringify(movie));
+  update(movie: UpdateMovieDto): void {
+    this.movieService.update(movie)
+    .pipe(take(1))
+    .subscribe(res => {
+      this.routeToListMovies();
+    });
   }
 
   routeToListMovies(): void {

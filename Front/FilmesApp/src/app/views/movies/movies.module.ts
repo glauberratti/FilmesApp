@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MoviesRoutingModule } from './movies-routing.module';
@@ -24,6 +25,7 @@ import { MovieFormComponent } from './movie-form/movie-form.component';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatTooltipModule,
     ReactiveFormsModule
   ]
 })

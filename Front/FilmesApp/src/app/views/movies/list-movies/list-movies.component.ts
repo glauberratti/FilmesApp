@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieDto } from 'src/app/dtos/movie/MovieDto';
+import { MovieDto } from 'src/app/dtos/movie/movieDto';
+import { MovieService } from 'src/app/services/movie.service';
+import { take } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-list-movies',
@@ -9,52 +12,84 @@ import { MovieDto } from 'src/app/dtos/movie/MovieDto';
 })
 export class ListMoviesComponent implements OnInit {
 
-  moviesMock: MovieDto[] = [
-    {
-      id: 1,
-      title: 'título 1',
-      director: 'diretor 1',
-      genre: 'gênero 1',
-      synopsis: 'sinopse 1',
-      year: '2019'
-    },
-    {
-      id: 2,
-      title: 'título 2',
-      director: 'diretor 2',
-      genre: 'gênero 2',
-      synopsis: 'sinopse 2',
-      year: '2020'
-    },
-  ];
+  movies: MovieDto[];
+  // dataSource: MatTableDataSource<MovieDto[]>;
+  dataSource: any;
   displayedColumns: string[] = [
     'title',
     'director',
     'genre',
-    'synopsis',
-    'year',
     'edit',
     'remove'
   ];
-  dataSource = this.moviesMock;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+    private movieService: MovieService
+  ) {
+    
+  }
 
   ngOnInit(): void {
+    this.getMovies();
+  }
+
+  getMovies(): void {
+    this.movieService.getAll()
+    .pipe(take(1))
+    .subscribe((result: MovieDto[]) => {
+      this.movies = result;
+      this.dataSource = new MatTableDataSource(this.movies);
+    });
+  }
+
+  new(): void {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   edit(id: number): void {
     this.router.navigate(['edit', id], { relativeTo: this.route });
   }
 
-  remove(id: number): void {
-
+  askToRemove(id: number): void {
+    if (confirm('Tem certeza que deseja excluir este filme?')) {
+      this.remove(id);
+    }
   }
 
-  new(): void {
-    this.router.navigate(['new'], { relativeTo: this.route });
+  remove(id: number): void {
+    this.movieService.remove(id)
+    .pipe(take(1))
+    .subscribe((res => {
+      this.getMovies();
+    }));
+  }
+
+  applyFilterByTitle(event: Event): void {
+    this.setFilterPredicateByTitle();
+    this.applyFilter(event);
+  }
+
+  applyFilterByGenre(event: Event): void {
+    this.setFilterPredicateByGenre();
+    this.applyFilter(event);
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  setFilterPredicateByTitle(): void {
+    this.dataSource.filterPredicate = (data, filter: string): boolean => {
+      return data.title.toLowerCase().includes(filter);
+    };
+  }
+
+  setFilterPredicateByGenre(): void {
+    this.dataSource.filterPredicate = (data, filter: string): boolean => {
+      return data.genre.toLowerCase().includes(filter);
+    };
   }
 }

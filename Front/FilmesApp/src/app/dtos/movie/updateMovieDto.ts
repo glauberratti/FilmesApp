@@ -1,4 +1,4 @@
-export interface AddMovieDto {
+export interface UpdateMovieDto {
   title: string;
   director: string;
   genre: string;
