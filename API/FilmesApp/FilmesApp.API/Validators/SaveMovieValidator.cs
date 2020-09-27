@@ -26,10 +26,11 @@ namespace FilmesApp.API.Validators
                 .MaximumLength(500);
 
             RuleFor(c => c.Year)
-                .Length(4)
                 .Must((x) => {
+                    if (string.IsNullOrEmpty(x)) return true;
                     return int.TryParse(x, out var i);
-                }).WithMessage("'Year' deve ser numérico");
+                }).WithMessage("'Year' deve ser numérico")
+                .Length(4).When(x => !string.IsNullOrEmpty(x.Year));
         }
     }
 }
