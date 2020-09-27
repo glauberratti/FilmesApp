@@ -1,6 +1,6 @@
 <div style="margin: 0 auto; width: 50%;">
   <form class="example-form" [formGroup]="form" style="display: flex; flex-direction: column;">
-    <mat-error *ngIf="validateIsFieldRequired('title')">
+    <mat-error *ngIf="validateIsFieldRequired('title') && !isToConsultMovie">
       O título é <strong>obrigatório</strong>.
     </mat-error>
     <mat-form-field appearance="fill">
@@ -8,7 +8,7 @@
       <input matInput [maxlength]="100" formControlName="title">
     </mat-form-field>
   
-    <mat-error *ngIf="validateIsFieldRequired('director')">
+    <mat-error *ngIf="validateIsFieldRequired('director') && !isToConsultMovie">
       O diretor é <strong>obrigatório</strong>.
     </mat-error>
     <mat-form-field appearance="fill">
@@ -16,7 +16,7 @@
       <input matInput [maxlength]="100" formControlName="director">
     </mat-form-field>
 
-    <mat-error *ngIf="validateIsFieldRequired('genre')">
+    <mat-error *ngIf="validateIsFieldRequired('genre') && !isToConsultMovie">
       O gênero é <strong>obrigatório</strong>.
     </mat-error>
     <mat-form-field appearance="fill">
@@ -29,7 +29,7 @@
       <textarea matInput [maxlength]="500" formControlName="synopsis"></textarea>
     </mat-form-field>
   
-    <mat-error *ngIf="validateYear()">
+    <mat-error *ngIf="validateYear() && !isToConsultMovie">
       O ano teve ser <strong>numérico</strong> com <strong>4</strong> caracteres.
     </mat-error>
     <mat-form-field appearance="fill">
@@ -39,6 +39,7 @@
   </form>
 
   <button mat-raised-button
+    *ngIf="!isToConsultMovie"
     color="primary"
     (click)="onSubmit()">
     Salvar

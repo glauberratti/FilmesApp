@@ -24,14 +24,15 @@
     <td mat-cell *matCellDef="let element"> {{element.genre}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="synopsis">
-    <th mat-header-cell *matHeaderCellDef> Sinopse </th>
-    <td mat-cell *matCellDef="let element"> {{element.synopsis}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="year">
-    <th mat-header-cell *matHeaderCellDef> Ano </th>
-    <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+  <ng-container matColumnDef="info">
+    <th mat-header-cell *matHeaderCellDef> Consultar </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="primary"
+      matTooltip="Consultar filme"
+      (click)="info(element.id)">
+        <mat-icon>info</mat-icon>
+      </button>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="edit">

@@ -7,6 +7,7 @@ import { MovieFormComponent } from './movie-form/movie-form.component';
 const routes: Routes = [
   { path: '', component: ListMoviesComponent },
   { path: 'new', component: MovieFormComponent},
+  { path: 'info/:id', component: MovieFormComponent},
   { path: 'edit/:id', component: MovieFormComponent}
 ];
 

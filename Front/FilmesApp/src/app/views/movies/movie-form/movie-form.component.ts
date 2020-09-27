@@ -15,6 +15,7 @@ export class MovieFormComponent implements OnInit {
 
   form: FormGroup;
   isToEditMovie = false;
+  isToConsultMovie = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,21 +33,33 @@ export class MovieFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
-      (params: any) => {
-        const id = Number(params.id);
-
-        if (id) {
+    this.route.url.subscribe(
+      (url: any) => {
+        if (url[0].path === 'info') {
+          this.isToConsultMovie = true;
+          this.form.disable();
+        } else if (url[0].path === 'edit') {
           this.isToEditMovie = true;
-
-          this.form.addControl('id', this.fb.control(id));
-
-          this.movieService.getById(id)
-          .pipe(take(1))
-          .subscribe((result: MovieDto) => {
-            this.form.patchValue(result);
-          });
         }
+
+        this.route.params.subscribe(
+          (params: any) => {
+            const id = Number(params.id);
+
+            if (this.isToEditMovie) {
+              this.form.addControl('id', this.fb.control(id));
+            }
+
+            if (id) {
+              this.movieService.getById(id)
+              .pipe(take(1))
+              .subscribe((result: MovieDto) => {
+                this.form.patchValue(result);
+              });
+            }
+          }
+        )
+        .unsubscribe();
       }
     )
     .unsubscribe();

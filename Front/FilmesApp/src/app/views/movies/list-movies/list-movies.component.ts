@@ -13,12 +13,12 @@ import { MatTableDataSource } from '@angular/material/table';
 export class ListMoviesComponent implements OnInit {
 
   movies: MovieDto[];
-  // dataSource: MatTableDataSource<MovieDto[]>;
   dataSource: any;
   displayedColumns: string[] = [
     'title',
     'director',
     'genre',
+    'info',
     'edit',
     'remove'
   ];
@@ -27,9 +27,7 @@ export class ListMoviesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private movieService: MovieService
-  ) {
-    
-  }
+  ) { }
 
   ngOnInit(): void {
     this.getMovies();
@@ -46,6 +44,10 @@ export class ListMoviesComponent implements OnInit {
 
   new(): void {
     this.router.navigate(['new'], { relativeTo: this.route });
+  }
+
+  info(id: number): void {
+    this.router.navigate(['info', id], { relativeTo: this.route });
   }
 
   edit(id: number): void {
